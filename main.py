@@ -1,49 +1,6 @@
 import csv
-
-
-class Round:
-    def __init__(
-        self,
-        player,
-        date,
-        time,
-        course,
-        rating,
-        slope,
-        scoring_format,
-        completed_holes,
-        gross_score,
-        gross_score_over_par,
-    ):
-
-        self.player = player
-        self.date = date  # + time
-        self.course = course
-        self.rating = float(rating) if rating else None
-        self.slope = float(slope) if slope else None
-        self.scoring_format = scoring_format
-        self.completed_holes = int(completed_holes) if completed_holes else None
-        self.gross_score = int(gross_score) if gross_score else None
-        self.gross_score_over_par = (
-            int(gross_score_over_par) if gross_score_over_par else None
-        )
-
-    def Print(self):
-        print(
-            f"{self.player}; {self.date}; {self.rating}; {self.slope}; {self.scoring_format}; {self.completed_holes}; {self.gross_score}\n"
-        )
-
-
-class Combined_Round:
-    def __init__(self, date, course, rating, slope, gross_score):
-        self.date = date
-        self.course = course
-        self.rating = rating
-        self.slope = slope
-        self.gross_score = gross_score
-        self.handicap_differential = (
-            (gross_score - rating) * 113 / slope
-        )  # USGA formula
+from models.round import Round
+from models.combined_round import CombinedRound
 
 
 def import_rounds(filename):
@@ -126,7 +83,7 @@ def combine_rounds(rounds):
         # Full round
         if round.completed_holes == 18:
             # Add round to combined_rounds
-            combined_round = Combined_Round(
+            combined_round = CombinedRound(
                 round.date,
                 round.course,
                 round.rating,
@@ -150,7 +107,7 @@ def combine_rounds(rounds):
                 course = "Combined 9-hole round"
 
                 # Add round to combined_rounds
-                combined_round = Combined_Round(
+                combined_round = CombinedRound(
                     date, course, rating, slope, gross_score
                 )
                 combined_rounds.append(combined_round)
